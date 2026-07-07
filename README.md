@@ -26,6 +26,7 @@ end
 -  Powered by Fireworks AI running on AMD GPUs
 
 ## Architecture
+React Frontend → Flask Backend → Fireworks AI (AMD GPUs) → Cisco Router / GNS3
 
 ##  Quick Start
 
@@ -36,7 +37,7 @@ end
 ### Run with Docker
 
 ```bash
-git clone https://github.com/yourusername/netconfig
+git clone https://github.com/malaaaeeka/netconfig
 cd netconfig
 cp ai-chatbot-backend/.env.example ai-chatbot-backend/.env
 # Add your FIREWORKS_API_KEY to .env
