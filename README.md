@@ -1,8 +1,8 @@
-# NetConfig AI 
+# NetConfig AI
 
 > AI-powered network configuration assistant that converts natural language to Cisco IOS commands — powered by Fireworks AI on AMD GPUs.
 
-##  What It Does
+## What It Does
 
 Network engineers spend hours writing Cisco IOS commands manually. NetConfig AI lets you describe what you want in plain English and instantly generates production-ready configuration commands — which can be deployed directly to real or simulated routers with one click.
 
@@ -10,25 +10,27 @@ Network engineers spend hours writing Cisco IOS commands manually. NetConfig AI 
 > "Configure OSPF with network 192.168.1.0/24 in area 0"
 
 Generates:
-
+```bash
 router ospf 1
 network 192.168.1.0 0.0.0.255 area 0
 end
+```
 
-##  Features
+## Features
 
--  Natural language to Cisco IOS command generation
--  Network diagram upload — upload a topology image and get commands
--  One-click deployment to real Cisco routers via SSH
--  GNS3 simulator support for testing without real hardware
--  Chat history saved to Firebase
--  Firebase authentication
--  Powered by Fireworks AI running on AMD GPUs
+- Natural language to Cisco IOS command generation
+- Network diagram upload — upload a topology image and get commands
+- One-click deployment to real Cisco routers via SSH
+- GNS3 simulator support for testing without real hardware
+- Chat history saved to Firebase
+- Firebase authentication
+- Powered by Fireworks AI running on AMD GPUs
 
 ## Architecture
+
 React Frontend → Flask Backend → Fireworks AI (AMD GPUs) → Cisco Router / GNS3
 
-##  Quick Start
+## Quick Start
 
 ### Prerequisites
 - Docker Desktop
@@ -62,7 +64,7 @@ npm install
 npm run dev
 ```
 
-##  Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -74,7 +76,7 @@ npm run dev
 | Storage | Firebase Firestore, Cloudinary |
 | Simulation | GNS3 |
 
-##  Supported Protocols
+## Supported Protocols
 
 - Routing: OSPF, EIGRP, BGP, RIP, Static Routes
 - Switching: VLANs, Trunking, VTP, STP, Port Security
@@ -82,11 +84,13 @@ npm run dev
 - NAT: Static NAT, Dynamic NAT, PAT
 - Redundancy: HSRP, VRRP
 
-##  Built For
+## Built For
 
 AMD Developer Hackathon: ACT II — Track 3 (Unicorn Track)
 
-##  Team
+## Team
 
-Malaika Khalid
-Omama Khalid
+- Malaika Khalid
+- Omama Khalid
+
+Abdul Wali Khan University Mardan
