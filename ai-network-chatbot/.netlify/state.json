@@ -1,0 +1,21 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Islamabad",
+			"country": {
+				"code": "PK",
+				"name": "Pakistan"
+			},
+			"subdivision": {
+				"code": "IS",
+				"name": "Islamabad"
+			},
+			"timezone": "Asia/Karachi",
+			"latitude": 33.7233,
+			"longitude": 73.0435,
+			"postalCode": "44040"
+		},
+		"timestamp": 1776925293232
+	},
+	"siteId": "3f014b22-e37c-4368-b349-04e56b1c5c2c"
+}
