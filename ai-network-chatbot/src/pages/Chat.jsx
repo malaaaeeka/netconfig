@@ -13,7 +13,7 @@ const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
 const GEMINI_MODELS = [
-  { id: 'gpt-oss-120b', label: 'GPT-OSS 120B', desc: 'Powered by AMD' },
+  { id: 'kimi-k2p7-code', label: 'Kimi K2.7 Code', desc: 'Vision + Code' },
 ]
 
 async function uploadToCloudinary(file) {
@@ -29,15 +29,15 @@ async function uploadToCloudinary(file) {
   return data.secure_url
 }
 
-// async function urlToBase64(url) {
-//   const response = await fetch(url)
-//   const blob = await response.blob()
-//   return new Promise((resolve) => {
-//     const reader = new FileReader()
-//     reader.onloadend = () => resolve(reader.result.split(',')[1])
-//     reader.readAsDataURL(blob)
-//   })
-// }
+async function urlToBase64(url) {
+  const response = await fetch(url)
+  const blob = await response.blob()
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result.split(',')[1])
+    reader.readAsDataURL(blob)
+  })
+}
 
 
 // ─── Inline markdown (bold, italic, inline code) ──────────────────────────────
@@ -555,7 +555,7 @@ export default function Chat() {
         setUploading(true)
         cloudinaryUrls = await Promise.all(imageFiles.map(i => uploadToCloudinary(i.file)))
         setUploading(false)
-        setLastImageUrl(cloudinaryUrls[0])
+        setLastImageUrl(cloudinaryUrls)
         setMessages(prev => prev.map((msg, idx) =>
           idx === prev.length - 1 && msg.role === 'user'
             ? { ...msg, images: cloudinaryUrls }
@@ -564,11 +564,11 @@ export default function Chat() {
       }
 
       const botReply = await askFireworks(
-        userMessage, history,
-        systemPrompt + '\n' + protocolPrompts[protocol],
-        cloudinaryUrls[0] || lastImageUrl,
-        selectedModel
-      )
+  userMessage, history,
+  systemPrompt + '\n' + protocolPrompts[protocol],
+  cloudinaryUrls.length > 0 ? cloudinaryUrls : (lastImageUrl || []),
+  selectedModel
+)
 
       setMessages(prev => [...prev, { role: 'bot', text: botReply }])
       setHistory(prev => [...prev,
