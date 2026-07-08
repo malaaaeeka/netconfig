@@ -19,7 +19,7 @@ FIREWORKS_API_URL = "https://api.fireworks.ai/inference/v1/chat/completions"
 
 # Vision-capable model on Fireworks / AMD hardware
 # Update this model string on July 6th once AMD reveals the official models
-FIREWORKS_MODEL = FIREWORKS_MODEL = "accounts/fireworks/models/gpt-oss-120b"
+FIREWORKS_MODEL = "accounts/fireworks/models/kimi-k2p7-code"
 
 SYSTEM_PROMPT = """You are an expert Cisco IOS network engineer with 20 years of experience.
 
@@ -59,7 +59,7 @@ def chat():
     print("Data:", data)
     message = data.get('message', '')
     history = data.get('history', [])
-    image_base64 = data.get('image_base64', None)
+    images = data.get('images', None) or []
 
     if not message:
         print("ERROR: no message")
@@ -70,26 +70,33 @@ def chat():
         return jsonify({'error': 'Fireworks API key not configured'}), 500
     
     print("KEY OK:", FIREWORKS_API_KEY[:5])
+    print("KEY OK:", FIREWORKS_API_KEY[:5])
+    print(f"Images received: {len(images)}")
+    for i, img in enumerate(images):
+        print(f"  image {i}: mime={img.get('mime')} len={len(img.get('data',''))}")
 
     # Build the user message content
-    if image_base64:
-        # Vision: send image + text together
+    if images:
+        # Vision: send all images + text together
         user_content = [
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": f"data:image/jpeg;base64,{image_base64}"
+                    "url": f"data:{img.get('mime', 'image/png')};base64,{img['data']}"
                 }
-            },
-            {
-                "type": "text",
-                "text": (
-                    "The user uploaded a network diagram. "
-                    "Analyze it and generate appropriate Cisco IOS commands.\n\n"
-                    f"User request: {message}"
-                )
             }
+            for img in images
         ]
+        plural = "s" if len(images) > 1 else ""
+        user_content.append({
+            "type": "text",
+            "text": (
+                f"The user uploaded {len(images)} network diagram{plural}. "
+                "Analyze all of them and generate appropriate Cisco IOS commands, "
+                "comparing them if the user asks for a comparison.\n\n"
+                f"User request: {message}"
+            )
+        })
     else:
         user_content = message
 
@@ -125,6 +132,11 @@ def chat():
     except requests.exceptions.Timeout:
         return jsonify({'error': 'Request timed out'}), 504
     except Exception as e:
+        print("FIREWORKS ERROR:", repr(e))
+        try:
+            print("RAW RESPONSE:", response.text)
+        except NameError:
+            print("No response object was created")
         return jsonify({'error': str(e)}), 500
 
 
